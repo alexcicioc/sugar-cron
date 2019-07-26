@@ -47,9 +47,6 @@ RUN docker-php-ext-install mysqli \
     && pecl install redis \
     && docker-php-ext-enable redis
 
-RUN curl -sS http://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
-
 COPY ./cron /usr/local/bin/sugarcron
 
 WORKDIR "/var/www/html"
