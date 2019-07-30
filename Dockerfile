@@ -1,11 +1,7 @@
 FROM php:7.1-cli
-MAINTAINER enrico.simonetti@gmail.com
 
 RUN apt-get update \
     && apt-get install -y \
-    sudo \
-    vim \
-    unzip \
     libmcrypt-dev \
     libpng-dev \
     libgmp-dev \
@@ -13,15 +9,9 @@ RUN apt-get update \
     libc-client-dev \
     libkrb5-dev \
     libldap2-dev \
-    git \
     --no-install-recommends
 
-RUN apt-get clean \
-    && apt-get -y autoremove \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN adduser sugar --disabled-password --disabled-login --gecos "" \
-    && echo "sugar ALL=NOPASSWD: ALL" > /etc/sudoers.d/sugar
+RUN adduser sugar
 
 RUN echo 'date.timezone = GMT' >> /usr/local/etc/php/conf.d/docker.ini \
     && echo 'error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT \& ~E_DEPRECATED' >> /usr/local/etc/php/conf.d/docker.ini \
@@ -50,6 +40,5 @@ RUN docker-php-ext-install mysqli \
 COPY ./cron /usr/local/bin/sugarcron
 
 WORKDIR "/var/www/html"
-USER sugar
 
-CMD ["/usr/local/bin/sugarcron"]
+CMD ["su", "-", "sugar", "-c", "/usr/local/bin/sugarcron"]
