@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+adduser "$APACHE_RUN_USER" --disabled-password --disabled-login --gecos "" || true
+exec su - sugar -c sugarcron $@

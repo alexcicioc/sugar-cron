@@ -11,8 +11,6 @@ RUN apt-get update \
     libldap2-dev \
     --no-install-recommends
 
-RUN adduser sugar
-
 RUN echo 'date.timezone = GMT' >> /usr/local/etc/php/conf.d/docker.ini \
     && echo 'error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT \& ~E_DEPRECATED' >> /usr/local/etc/php/conf.d/docker.ini \
     && echo 'error_log = /proc/1/fd/1' >> /usr/local/etc/php/conf.d/docker.ini \
@@ -37,8 +35,8 @@ RUN docker-php-ext-install mysqli \
     && pecl install redis \
     && docker-php-ext-enable redis
 
-COPY ./cron /usr/local/bin/sugarcron
+ADD ./scripts /usr/local/bin
 
 WORKDIR "/var/www/html"
 
-CMD ["su", "-", "sugar", "-c", "/usr/local/bin/sugarcron"]
+CMD ["start-job"]
